@@ -1,5 +1,6 @@
 {
   "expo": {
+    "slug": "abstracdemo",
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -12,6 +13,9 @@
     "plugins": [
       "expo-secure-store",
       "expo-router"
-    ]
+    ],
+    "ios": {
+      "bundleIdentifier": "com.corporateguuu.abstracdemo"
+    }
   }
 }

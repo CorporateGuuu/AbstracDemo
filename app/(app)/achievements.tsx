@@ -50,7 +50,7 @@ export default function AchievementsScreen() {
           style={styles.profilePic}
         />
 
-        <Image source={require('../../assets/logo.png')} style={styles.logo} />
+        <View style={styles.logo} />
 
         <View style={styles.notification}>
           <Ionicons name="notifications-outline" size={24} color="#FFF" />

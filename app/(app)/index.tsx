@@ -32,7 +32,7 @@ export default function Home() {
             source={{ uri: 'https://i.pravatar.cc/150?img=1' }}
             style={styles.profilePic}
           />
-          <Image source={require('../../assets/logo.png')} style={styles.logo} />
+          <View style={styles.logo} />
           <View style={styles.notification}>
             <Ionicons name="notifications-outline" size={24} color="#FFF" />
             <Text style={styles.badge}>10</Text>
