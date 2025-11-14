@@ -1,9 +1,11 @@
-import React from 'react';
+// app/(app)/profile.tsx
+import React, { useState } from 'react';
 import {
   View,
   Text,
   Image,
   FlatList,
+  RefreshControl,
   StyleSheet,
   Dimensions,
   TouchableOpacity,
@@ -11,59 +13,56 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
-const IMAGE_SIZE = (width - 64) / 3; // 3 columns with padding
+const ITEM_SIZE = (width - 48 - 16) / 3; // 3 cols, 8px gap, 20px side padding
 
 const mockPosts = [
-  { id: 1, imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&w=400&h=400&fit=crop&crop=focalpoint&auto=format' },
-  { id: 2, imageUrl: 'https://images.unsplash.com/photo-1464822759844-d150ad67d42e?ixlib=rb-4.0.3&w=400&h=400&fit=crop&crop=focalpoint&auto=format' },
-  { id: 3, imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&w=400&h=400&fit=crop&crop=focalpoint&auto=format' },
-  { id: 4, imageUrl: 'https://images.unsplash.com/photo-1464822759844-d150ad67d42e?ixlib=rb-4.0.3&w=400&h=400&fit=crop&crop=focalpoint&auto=format' },
-  { id: 5, imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&w=400&h=400&fit=crop&crop=focalpoint&auto=format' },
-  { id: 6, imageUrl: 'https://images.unsplash.com/photo-1464822759844-d150ad67d42e?ixlib=rb-4.0.3&w=400&h=400&fit=crop&crop=focalpoint&auto=format' },
+  { id: 1, imageUrl: 'https://images.unsplash.com/photo-1506905925346-5002b359c9bc?w=400' },
+  { id: 2, imageUrl: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400' },
+  { id: 3, imageUrl: 'https://images.unsplash.com/photo-1511884642898-4c922225c15c?w=400' },
+  { id: 4, imageUrl: 'https://images.unsplash.com/photo-1494500764479-0c8f4544f368?w=400' },
+  { id: 5, imageUrl: 'https://images.unsplash.com/photo-1506197061612-5a1d3e6d8d8b?w=400' },
+  { id: 6, imageUrl: 'https://images.unsplash.com/photo-1518568814500-bf0f8d125322?w=400' },
 ];
 
-const ProfileScreen = () => {
-  const renderPost = ({ item }: { item: { id: number; imageUrl: string } }) => (
-    <Image
-      source={{ uri: item.imageUrl }}
-      style={styles.postImage}
-    />
-  );
+export default function ProfileScreen() {
+  const [winRate, setWinRate] = useState(57.4);
+  const [friends, setFriends] = useState(81);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setWinRate(50 + Math.random() * 15);
+      setFriends(81 + Math.floor(Math.random() * 6));
+      setRefreshing(false);
+    }, 1500);
+  };
 
   return (
     <View style={styles.container}>
-      {/* Top Bar */}
-      <View style={styles.topBar}>
-        <TouchableOpacity>
-          <Ionicons name="search" size={24} color="#FFFFFF" />
-        </TouchableOpacity>
+      {/* Header */}
+      <View style={styles.header}>
+        <Ionicons name="search" size={24} color="#FFF" />
         <Text style={styles.username}>willsamrick</Text>
-        <TouchableOpacity>
-          <Ionicons name="ellipsis-horizontal" size={24} color="#FFFFFF" />
-        </TouchableOpacity>
+        <Ionicons name="ellipsis-horizontal" size={24} color="#FFF" />
       </View>
 
       {/* Profile Card */}
-      <View style={styles.profileCard}>
+      <View style={styles.card}>
         <View style={styles.statsRow}>
-          <View style={styles.statColumn}>
-            <Text style={styles.statNumber}>57.4%</Text>
+          <View style={styles.stat}>
+            <Text style={styles.statValue}>{winRate.toFixed(1)}%</Text>
             <Text style={styles.statLabel}>win rate</Text>
           </View>
-
-          <View style={styles.profileImageContainer}>
-            <Image
-              source={{ uri: 'https://via.placeholder.com/80x80/667eea/FFFFFF?text=👤' }}
-              style={styles.profileImage}
-            />
-          </View>
-
-          <View style={styles.statColumn}>
-            <Text style={styles.statNumber}>81</Text>
+          <Image
+            source={{ uri: 'https://i.pravatar.cc/150?img=3' }}
+            style={styles.avatar}
+          />
+          <View style={styles.stat}>
+            <Text style={styles.statValue}>{friends}</Text>
             <Text style={styles.statLabel}>friends</Text>
           </View>
         </View>
-
         <View style={styles.badge}>
           <Text style={styles.badgeText}>Light the beam</Text>
         </View>
@@ -72,92 +71,67 @@ const ProfileScreen = () => {
       {/* Posts Grid */}
       <FlatList
         data={mockPosts}
-        renderItem={renderPost}
-        keyExtractor={(item) => item.id.toString()}
         numColumns={3}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.postsContainer}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <Image source={{ uri: item.imageUrl }} style={styles.postImage} />
+        )}
+        contentContainerStyle={styles.grid}
+        columnWrapperStyle={styles.row}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#FFF" />
+        }
       />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0A0A0F',
-  },
-  topBar: {
+  container: { flex: 1, backgroundColor: '#0A0A0F', paddingTop: 50 },
+  header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: 60,
-    paddingTop: 50,
     paddingHorizontal: 20,
+    marginBottom: 20,
   },
-  username: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    fontFamily: 'Montserrat',
-  },
-  profileCard: {
+  username: { color: '#FFF', fontSize: 18, fontWeight: 'bold', fontFamily: 'System' },
+  card: {
     backgroundColor: '#1A1A2E',
+    marginHorizontal: 20,
     borderRadius: 24,
     padding: 20,
-    margin: 20,
+    marginBottom: 30,
   },
   statsRow: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  statColumn: {
-    flex: 1,
     alignItems: 'center',
   },
-  statNumber: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-  },
-  statLabel: {
-    fontSize: 14,
-    color: '#A0A0A0',
-    marginTop: 4,
-  },
-  profileImageContainer: {
-    flex: 0,
-  },
-  profileImage: {
+  stat: { alignItems: 'center' },
+  statValue: { color: '#FFF', fontSize: 32, fontWeight: 'bold' },
+  statLabel: { color: '#A0A0A0', fontSize: 14 },
+  avatar: {
     width: 80,
     height: 80,
     borderRadius: 40,
     borderWidth: 2,
-    borderColor: '#FFFFFF',
+    borderColor: '#FFF',
   },
   badge: {
     backgroundColor: '#2D2D3D',
-    borderRadius: 30,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
     alignSelf: 'center',
-  },
-  badgeText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  postsContainer: {
     paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 30,
+    marginTop: 16,
   },
+  badgeText: { color: '#FFF', fontWeight: '600' },
+  grid: { paddingHorizontal: 20 },
+  row: { justifyContent: 'space-between', marginBottom: 8 },
   postImage: {
-    width: IMAGE_SIZE,
-    height: IMAGE_SIZE,
+    width: ITEM_SIZE,
+    height: ITEM_SIZE,
     borderRadius: 16,
-    margin: 4,
   },
 });
-
-export default ProfileScreen;

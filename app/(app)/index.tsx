@@ -1,4 +1,5 @@
-import React from 'react';
+// app/(app)/index.tsx
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,358 +7,148 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
-  Dimensions,
-  Alert,
-  StatusBar,
+  Share,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
-import * as SecureStore from 'expo-secure-store';
-
-const { width } = Dimensions.get('window');
-const AVATAR_SIZE = 60;
-const CARD_RADIUS = 18;
+import ChallengeModal from '../../components/ChallengeModal';
 
 export default function Home() {
   const router = useRouter();
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const logout = async () => {
-    await SecureStore.deleteItemAsync('authToken');
-    router.replace('/(auth)/login');
-  };
-
-  const handleAchievements = () => {
-    Alert.alert('Achievements', 'Coming soon! Trophy case unlocks at level 5.');
-  };
-
-  const handleInviteFriends = () => {
-    Alert.alert('Referral Link Copied!', 'Share with friends to earn bonus points!');
-  };
-
-  const handleCreateChallenge = () => {
-    Alert.alert('Create Challenge', 'Challenge creation feature coming in next update!');
+  const shareReferral = async () => {
+    await Share.share({
+      message: 'Join me on the challenge app! myapp://referral/willsamrick',
+    });
   };
 
   return (
-    <LinearGradient
-      colors={['#f093fb', '#f5576c', '#4facfe']}
-      style={styles.container}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-    >
-      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Top Header: Profile + Logo + Notification */}
+    <View style={styles.container}>
+      <ScrollView>
+        {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => router.push('/profile')}
-          >
-            <Image
-              source={{ uri: 'https://via.placeholder.com/50x50/667eea/FFFFFF?text=👤' }}
-              style={styles.profilePic}
-            />
-          </TouchableOpacity>
-          <LinearGradient
-            colors={['#ffecd2', '#fcb69f']}
-            style={styles.logoContainer}
-          >
-            <Ionicons name="arrow-forward" size={32} color="#333" />
-          </LinearGradient>
-          <TouchableOpacity style={styles.notification} activeOpacity={0.8}>
-            <LinearGradient
-              colors={['#ffecd2', '#fcb69f']}
-              style={styles.notificationGradient}
-            >
-              <Ionicons name="notifications-outline" size={28} color="#333" />
-              <View style={styles.badgeContainer}>
-                <LinearGradient
-                  colors={['#ff6b6b', '#ffa500']}
-                  style={styles.badge}
-                >
-                  <Text style={styles.badgeText}>10</Text>
-                </LinearGradient>
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
+          <Image
+            source={{ uri: 'https://i.pravatar.cc/150?img=1' }}
+            style={styles.profilePic}
+          />
+          <Image source={require('../../assets/logo.png')} style={styles.logo} />
+          <View style={styles.notification}>
+            <Ionicons name="notifications-outline" size={24} color="#FFF" />
+            <Text style={styles.badge}>10</Text>
+          </View>
         </View>
 
         {/* Menu Buttons */}
         <View style={styles.menuRow}>
-          <TouchableOpacity style={styles.menuButton} onPress={handleAchievements} activeOpacity={0.8}>
-            <LinearGradient
-              colors={['#ffd700', '#ffed4e']}
-              style={styles.menuButtonGradient}
-            >
-              <Ionicons name="trophy-outline" size={24} color="#fff" style={styles.menuIcon} />
-              <Text style={styles.menuLabel}>Achievements</Text>
-            </LinearGradient>
+          <TouchableOpacity
+            style={styles.menuButton}
+            onPress={() => router.push('/(app)/achievements')}
+          >
+            <Ionicons name="trophy-outline" size={20} color="#FFF" />
+            <Text style={styles.menuLabel}>Achievements</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuButton} onPress={handleInviteFriends} activeOpacity={0.8}>
-            <LinearGradient
-              colors={['#45b7e6', '#7fc8f8']}
-              style={styles.menuButtonGradient}
-            >
-              <Ionicons name="copy-outline" size={24} color="#fff" style={styles.menuIcon} />
-              <Text style={styles.menuLabel}>Copy Referral Link</Text>
-            </LinearGradient>
+          <TouchableOpacity style={styles.menuButton} onPress={shareReferral}>
+            <Ionicons name="copy-outline" size={20} color="#FFF" />
+            <Text style={styles.menuLabel}>Copy Referral Link</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Create New Challenge Card */}
-        <TouchableOpacity style={styles.createCard} onPress={handleCreateChallenge} activeOpacity={0.8}>
-          <LinearGradient
-            colors={['rgba(255,255,255,0.25)', 'rgba(255,255,255,0.1)']}
-            style={styles.createCardGradient}
-          >
-            <LinearGradient
-              colors={['#667eea', '#764ba2']}
-              style={styles.createIconContainer}
-            >
-              <Ionicons name="add-circle" size={28} color="#fff" />
-            </LinearGradient>
-            <Text style={styles.createTitle}>Create New Challenge</Text>
-          </LinearGradient>
+        {/* Create Challenge Card */}
+        <TouchableOpacity style={styles.createCard} onPress={() => setModalVisible(true)}>
+          <Text style={styles.createTitle}>Create New Challenge</Text>
         </TouchableOpacity>
 
-        {/* Friends Section */}
+        {/* Friends */}
         <View style={styles.friendsSection}>
           <Text style={styles.sectionTitle}>1v1 Your Best Friends</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.friendsScroll}
-          >
-            {Array.from({ length: 4 }).map((_, i) => (
-              <LinearGradient
-                key={i}
-                colors={['#ffecd2', '#fcb69f']}
-                style={styles.friendAvatar}
-              >
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.friendsScroll}>
+            {[1, 2, 3, 4].map((i) => (
+              <TouchableOpacity key={i} style={styles.friendAvatar} onPress={() => router.push('/(app)/profile')}>
                 <Image
-                  source={{
-                    uri: `https://via.placeholder.com/${AVATAR_SIZE}x${AVATAR_SIZE}/45b7e6/FFFFFF?text=F${i + 1}`,
-                  }}
+                  source={{ uri: `https://i.pravatar.cc/150?img=${i + 10}` }}
                   style={styles.avatar}
                 />
-              </LinearGradient>
+              </TouchableOpacity>
             ))}
           </ScrollView>
         </View>
-
-        {/* Hidden logout button for demo */}
-        <TouchableOpacity style={styles.logoutButton} onPress={logout} activeOpacity={0.8}>
-          <LinearGradient
-            colors={['#ff6b6b', '#ffa500']}
-            style={styles.logoutButtonGradient}
-          >
-            <Text style={styles.logoutText}>Logout</Text>
-          </LinearGradient>
-        </TouchableOpacity>
       </ScrollView>
-    </LinearGradient>
+
+      {/* Challenge Modal */}
+      <ChallengeModal visible={modalVisible} onClose={() => setModalVisible(false)} />
+    </View>
   );
 }
 
+// Keep your existing styles + add:
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: StatusBar.currentHeight || 44,
-  },
+  container: { flex: 1, backgroundColor: '#0A0A0F', paddingTop: 50 },
   header: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 24,
-    paddingVertical: 16,
-    marginBottom: 24,
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    marginBottom: 20,
   },
   profilePic: {
     width: 50,
     height: 50,
     borderRadius: 25,
-    borderWidth: 3,
-    borderColor: 'rgba(255,255,255,0.9)',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
+    borderWidth: 2,
+    borderColor: '#FFF',
   },
-  logoContainer: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 8,
-  },
-  notification: {
-    position: 'relative',
-  },
-  notificationGradient: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 8,
-  },
-  badgeContainer: {
-    position: 'absolute',
-    top: -8,
-    right: -8,
-  },
-  badge: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 3,
-    borderColor: 'rgba(255,255,255,0.9)',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  badgeText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
+  logo: { width: 40, height: 40, resizeMode: 'contain' },
   menuRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginHorizontal: 24,
-    marginBottom: 32,
+    marginHorizontal: 20,
+    marginBottom: 30,
   },
   menuButton: {
-    borderRadius: CARD_RADIUS,
-    minWidth: (width - 72) / 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 10,
-  },
-  menuButtonGradient: {
-    borderRadius: CARD_RADIUS,
-    paddingHorizontal: 24,
-    paddingVertical: 20,
+    backgroundColor: '#1A1A2E',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    borderRadius: 12,
+    minWidth: 140,
     alignItems: 'center',
-    justifyContent: 'center',
   },
-  menuIcon: {
-    fontSize: 24,
-    marginBottom: 8,
-  },
-  menuLabel: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: '700',
-    textAlign: 'center',
-  },
+  menuLabel: { color: '#FFF', fontSize: 14, fontWeight: '600', marginTop: 5 },
   createCard: {
-    marginHorizontal: 24,
-    marginBottom: 32,
-    borderRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.4,
-    shadowRadius: 12,
-    elevation: 15,
-  },
-  createCardGradient: {
-    borderRadius: 20,
-    padding: 24,
+    backgroundColor: '#2D2D3D',
+    marginHorizontal: 20,
+    marginBottom: 30,
+    padding: 20,
+    borderRadius: 16,
     alignItems: 'center',
-    justifyContent: 'center',
   },
-  createIconContainer: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 8,
-  },
-  createTitle: {
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: 'bold',
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
-  },
+  createTitle: { color: '#FFF', fontSize: 18, fontWeight: 'bold' },
   friendsSection: {
-    paddingHorizontal: 24,
-    paddingBottom: 100,
+    paddingHorizontal: 20,
   },
-  sectionTitle: {
-    color: 'rgba(255,255,255,0.9)',
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 16,
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
-  },
-  friendsScroll: {
-    paddingRight: 24,
-  },
-  friendAvatar: {
-    marginRight: 16,
-    borderRadius: AVATAR_SIZE / 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 8,
-  },
+  sectionTitle: { color: '#A0A0A0', fontSize: 16, fontWeight: '500', marginBottom: 15 },
+  friendAvatar: { marginRight: 15 },
   avatar: {
-    width: AVATAR_SIZE,
-    height: AVATAR_SIZE,
-    borderRadius: AVATAR_SIZE / 2,
-    borderWidth: 3,
-    borderColor: 'rgba(255,255,255,0.8)',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    borderWidth: 2,
+    borderColor: '#FFF',
   },
-  logoutButton: {
+  notification: { position: 'relative' },
+  badge: {
     position: 'absolute',
-    bottom: 40,
-    left: 24,
-    right: 24,
-    borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 10,
+    top: -5,
+    right: -10,
+    backgroundColor: '#FF4757',
+    color: '#FFF',
+    fontSize: 10,
+    fontWeight: 'bold',
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    textAlign: 'center',
+    lineHeight: 18,
   },
-  logoutButtonGradient: {
-    paddingVertical: 16,
-    borderRadius: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logoutText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '700',
-  },
+  friendsScroll: { marginLeft: -20, paddingLeft: 20 },
 });
