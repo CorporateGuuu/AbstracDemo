@@ -1,10 +1,17 @@
 {
   "expo": {
-    "splash": {
-      "image": "./assets/splash.png",
-      "backgroundColor": "#1a1a2e",
-      "resizeMode": "contain"
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "d1bfd49a-ee29-4bab-b1de-6f85fca3069c"
+      }
     },
-    "assetBundlePatterns": ["**/*"]
+    "owner": "corporateguuu",
+    "plugins": [
+      "expo-secure-store",
+      "expo-router"
+    ]
   }
 }

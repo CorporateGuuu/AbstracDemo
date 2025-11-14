@@ -16,8 +16,8 @@ export default function RootLayout() {
   useEffect(() => {
     async function prepare() {
       try {
-        // 1. Preload logo
-        await Asset.loadAsync(require('../assets/logo.png'));
+        // 1. Preload assets (none)
+        // await Asset.loadAsync(require('../assets/logo.png'));
 
         // 2. Check auth token
         const token = await SecureStore.getItemAsync('authToken');
@@ -67,7 +67,7 @@ export default function RootLayout() {
   if (!isReady) {
     return (
       <LinearGradient
-        colors={['#1a1a2e', '#16213e', '#0f3460']}
+        colors={['#667eea', '#764ba2', '#f093fb']}
         style={styles.gradient}
       >
         <Animated.View
@@ -80,7 +80,7 @@ export default function RootLayout() {
           ]}
         >
           <Image
-            source={require('../assets/logo.png')}
+            source={require('../assets/AbstracLogo.png')}
             style={styles.logo}
             resizeMode="contain"
           />

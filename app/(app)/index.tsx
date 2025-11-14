@@ -8,14 +8,16 @@ import {
   StyleSheet,
   Dimensions,
   Alert,
+  StatusBar,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import * as SecureStore from 'expo-secure-store';
 
 const { width } = Dimensions.get('window');
 const AVATAR_SIZE = 60;
-const CARD_RADIUS = 12;
+const CARD_RADIUS = 18;
 
 export default function Home() {
   const router = useRouter();
@@ -38,194 +40,324 @@ export default function Home() {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Top Header: Profile + Logo + Notification */}
-      <View style={styles.header}>
-        <TouchableOpacity>
-          <Image
-            source={{ uri: 'https://via.placeholder.com/40x40/FF6B6B/FFFFFF?text=👤' }} // Replace with your profile pic
-            style={styles.profilePic}
-          />
-        </TouchableOpacity>
-        <Image
-          source={require('../assets/logo.png')} // Your app logo (white arrow from splash)
-          style={styles.logo}
-        />
-        <TouchableOpacity style={styles.notification}>
-          <Ionicons name="notifications-outline" size={28} color="#FFFFFF" />
-          <Text style={styles.badge}>10</Text>
-        </TouchableOpacity>
-      </View>
+    <LinearGradient
+      colors={['#f093fb', '#f5576c', '#4facfe']}
+      style={styles.container}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+    >
+      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Top Header: Profile + Logo + Notification */}
+        <View style={styles.header}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => router.push('/profile')}
+          >
+            <Image
+              source={{ uri: 'https://via.placeholder.com/50x50/667eea/FFFFFF?text=👤' }}
+              style={styles.profilePic}
+            />
+          </TouchableOpacity>
+          <LinearGradient
+            colors={['#ffecd2', '#fcb69f']}
+            style={styles.logoContainer}
+          >
+            <Ionicons name="arrow-forward" size={32} color="#333" />
+          </LinearGradient>
+          <TouchableOpacity style={styles.notification} activeOpacity={0.8}>
+            <LinearGradient
+              colors={['#ffecd2', '#fcb69f']}
+              style={styles.notificationGradient}
+            >
+              <Ionicons name="notifications-outline" size={28} color="#333" />
+              <View style={styles.badgeContainer}>
+                <LinearGradient
+                  colors={['#ff6b6b', '#ffa500']}
+                  style={styles.badge}
+                >
+                  <Text style={styles.badgeText}>10</Text>
+                </LinearGradient>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
 
-      {/* Menu Buttons */}
-      <View style={styles.menuRow}>
-        <TouchableOpacity style={styles.menuButton} onPress={handleAchievements}>
-          <Ionicons name="trophy-outline" size={20} color="#FFD700" style={styles.menuIcon} />
-          <Text style={styles.menuLabel}>Achievements</Text>
+        {/* Menu Buttons */}
+        <View style={styles.menuRow}>
+          <TouchableOpacity style={styles.menuButton} onPress={handleAchievements} activeOpacity={0.8}>
+            <LinearGradient
+              colors={['#ffd700', '#ffed4e']}
+              style={styles.menuButtonGradient}
+            >
+              <Ionicons name="trophy-outline" size={24} color="#fff" style={styles.menuIcon} />
+              <Text style={styles.menuLabel}>Achievements</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuButton} onPress={handleInviteFriends} activeOpacity={0.8}>
+            <LinearGradient
+              colors={['#45b7e6', '#7fc8f8']}
+              style={styles.menuButtonGradient}
+            >
+              <Ionicons name="copy-outline" size={24} color="#fff" style={styles.menuIcon} />
+              <Text style={styles.menuLabel}>Copy Referral Link</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+
+        {/* Create New Challenge Card */}
+        <TouchableOpacity style={styles.createCard} onPress={handleCreateChallenge} activeOpacity={0.8}>
+          <LinearGradient
+            colors={['rgba(255,255,255,0.25)', 'rgba(255,255,255,0.1)']}
+            style={styles.createCardGradient}
+          >
+            <LinearGradient
+              colors={['#667eea', '#764ba2']}
+              style={styles.createIconContainer}
+            >
+              <Ionicons name="add-circle" size={28} color="#fff" />
+            </LinearGradient>
+            <Text style={styles.createTitle}>Create New Challenge</Text>
+          </LinearGradient>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuButton} onPress={handleInviteFriends}>
-          <Ionicons name="copy-outline" size={20} color="#4ECDC4" style={styles.menuIcon} />
-          <Text style={styles.menuLabel}>Copy Referral Link</Text>
+
+        {/* Friends Section */}
+        <View style={styles.friendsSection}>
+          <Text style={styles.sectionTitle}>1v1 Your Best Friends</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.friendsScroll}
+          >
+            {Array.from({ length: 4 }).map((_, i) => (
+              <LinearGradient
+                key={i}
+                colors={['#ffecd2', '#fcb69f']}
+                style={styles.friendAvatar}
+              >
+                <Image
+                  source={{
+                    uri: `https://via.placeholder.com/${AVATAR_SIZE}x${AVATAR_SIZE}/45b7e6/FFFFFF?text=F${i + 1}`,
+                  }}
+                  style={styles.avatar}
+                />
+              </LinearGradient>
+            ))}
+          </ScrollView>
+        </View>
+
+        {/* Hidden logout button for demo */}
+        <TouchableOpacity style={styles.logoutButton} onPress={logout} activeOpacity={0.8}>
+          <LinearGradient
+            colors={['#ff6b6b', '#ffa500']}
+            style={styles.logoutButtonGradient}
+          >
+            <Text style={styles.logoutText}>Logout</Text>
+          </LinearGradient>
         </TouchableOpacity>
-      </View>
-
-      {/* Create New Challenge Card */}
-      <TouchableOpacity style={styles.createCard} onPress={handleCreateChallenge}>
-        <Ionicons name="add-circle" size={24} color="#007AFF" style={{ marginBottom: 8 }} />
-        <Text style={styles.createTitle}>Create New Challenge</Text>
-      </TouchableOpacity>
-
-      {/* Friends Section */}
-      <View style={styles.friendsSection}>
-        <Text style={styles.sectionTitle}>1v1 Your Best Friends</Text>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.friendsScroll}
-        >
-          {Array.from({ length: 4 }).map((_, i) => (
-            <View key={i} style={styles.friendAvatar}>
-              <Image
-                source={{
-                  uri: `https://via.placeholder.com/${AVATAR_SIZE}x${AVATAR_SIZE}/4ECDC4/FFFFFF?text=F${i + 1}`,
-                }} // Replace with real friend avatars
-                style={styles.avatar}
-              />
-            </View>
-          ))}
-        </ScrollView>
-      </View>
-
-      {/* Hidden logout button for demo */}
-      <TouchableOpacity style={styles.logoutButton} onPress={logout}>
-        <Text style={styles.logoutText}>Logout</Text>
-      </TouchableOpacity>
-    </View>
+      </ScrollView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0A0A0F', // Dark navy bg
-    paddingTop: 50, // Status bar offset
+    paddingTop: StatusBar.currentHeight || 44,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    marginBottom: 20,
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    marginBottom: 24,
   },
   profilePic: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    borderWidth: 2,
-    borderColor: '#FFFFFF',
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    borderWidth: 3,
+    borderColor: 'rgba(255,255,255,0.9)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
-  logo: {
-    width: 30,
-    height: 30,
-    // Assume your white arrow logo PNG here
+  logoContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 8,
   },
   notification: {
     position: 'relative',
   },
+  notificationGradient: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 8,
+  },
+  badgeContainer: {
+    position: 'absolute',
+    top: -8,
+    right: -8,
+  },
   badge: {
-    backgroundColor: '#FF4757', // Red badge
-    color: '#FFFFFF',
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 3,
+    borderColor: 'rgba(255,255,255,0.9)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  badgeText: {
+    color: '#fff',
     fontSize: 12,
     fontWeight: 'bold',
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    position: 'absolute',
-    top: -5,
-    right: -5,
-    borderWidth: 2,
-    borderColor: '#0A0A0F',
   },
   menuRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginHorizontal: 20,
-    marginBottom: 30,
+    marginHorizontal: 24,
+    marginBottom: 32,
   },
   menuButton: {
-    backgroundColor: '#1E1E2E', // Gray card
-    paddingHorizontal: 20,
-    paddingVertical: 15,
     borderRadius: CARD_RADIUS,
-    minWidth: (width - 60) / 2, // Equal split
+    minWidth: (width - 72) / 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 10,
+  },
+  menuButtonGradient: {
+    borderRadius: CARD_RADIUS,
+    paddingHorizontal: 24,
+    paddingVertical: 20,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   menuIcon: {
-    fontSize: 20,
-    marginBottom: 5,
+    fontSize: 24,
+    marginBottom: 8,
   },
   menuLabel: {
-    color: '#FFFFFF',
+    color: '#fff',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '700',
     textAlign: 'center',
   },
   createCard: {
-    backgroundColor: '#2D2D3D', // Lighter gray for create card
-    marginHorizontal: 20,
-    marginBottom: 30,
-    padding: 20,
-    borderRadius: 16,
-    alignItems: 'center',
+    marginHorizontal: 24,
+    marginBottom: 32,
+    borderRadius: 20,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    elevation: 15,
+  },
+  createCardGradient: {
+    borderRadius: 20,
+    padding: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  createIconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 8,
   },
   createTitle: {
-    color: '#FFFFFF',
-    fontSize: 18,
+    color: '#fff',
+    fontSize: 20,
     fontWeight: 'bold',
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   friendsSection: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
+    paddingBottom: 100,
   },
   sectionTitle: {
-    color: '#A0A0A0', // Light gray
-    fontSize: 16,
-    fontWeight: '500',
-    marginBottom: 15,
+    color: 'rgba(255,255,255,0.9)',
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 16,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   friendsScroll: {
-    paddingRight: 20,
+    paddingRight: 24,
   },
   friendAvatar: {
-    marginRight: 15,
+    marginRight: 16,
+    borderRadius: AVATAR_SIZE / 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 8,
   },
   avatar: {
     width: AVATAR_SIZE,
     height: AVATAR_SIZE,
     borderRadius: AVATAR_SIZE / 2,
-    borderWidth: 2,
-    borderColor: '#FFFFFF',
+    borderWidth: 3,
+    borderColor: 'rgba(255,255,255,0.8)',
   },
   logoutButton: {
     position: 'absolute',
-    bottom: 20,
-    left: 20,
-    right: 20,
-    backgroundColor: '#FF3B30',
-    paddingVertical: 15,
-    borderRadius: 8,
+    bottom: 40,
+    left: 24,
+    right: 24,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 10,
+  },
+  logoutButtonGradient: {
+    paddingVertical: 16,
+    borderRadius: 16,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   logoutText: {
     color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: '700',
   },
 });
