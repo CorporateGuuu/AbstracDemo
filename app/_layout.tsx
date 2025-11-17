@@ -1,8 +1,7 @@
-import { Slot, SplashScreen, Stack } from 'expo-router';
+import { Slot, SplashScreen } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { View, Image, Animated, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Asset } from 'expo-asset';
 import * as SecureStore from 'expo-secure-store';
 
 // Prevent native splash from hiding too early
@@ -48,8 +47,8 @@ export default function RootLayout() {
 
         // 4. Wait for animation + minimum 2 sec splash
         await Promise.all([
-          new Promise(r => setTimeout(r, 2000)),
-          new Promise(r => fadeAnim.addListener(({ value }) => value > 0.9 && r())),
+          new Promise<void>(resolve => setTimeout(resolve, 2000)),
+          new Promise<void>(resolve => fadeAnim.addListener(({ value }) => value > 0.9 && resolve())),
         ]);
 
       } catch (e) {
@@ -90,13 +89,7 @@ export default function RootLayout() {
   }
 
   // After splash: normal routing
-  return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="(auth)" />
-      <Stack.Screen name="(app)" />
-      <Stack.Screen name="+not-found" />
-    </Stack>
-  );
+  return <Slot />;
 }
 
 const styles = StyleSheet.create({
