@@ -1,15 +1,14 @@
-// app/(app)/achievements.tsx
 import React from 'react';
 import {
   View,
   Text,
-  Image,
   ScrollView,
   TouchableOpacity,
   StyleSheet,
-  Share,
+  Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const achievements = [
   { title: 'Win a Challenge', progress: '0/1', reward: '5 Free Stones' },
@@ -28,49 +27,40 @@ const achievements = [
 ];
 
 export default function AchievementsScreen({ navigation, onBack }) {
-  const copyReferral = async () => {
-    await Share.share({
-      message: 'Join me! Use my link: myapp://referral/willsamrick',
-    });
-  };
-
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Image
-          source={{ uri: 'https://i.pravatar.cc/150?img=1' }}
-          style={styles.profilePic}
-        />
-        <Image
-          source={require('../../assets/logo-white.png')} // Replace with your logo
-          style={styles.logo}
-          resizeMode="contain"
-        />
-        <View style={styles.stonesBadge}>
-          <Ionicons name="time-outline" size={16} color="#FFF" />
-          <Text style={styles.stonesText}>10</Text>
+      <ScrollView showsVerticalScrollIndicator={false}>
+
+        {/* Header */}
+        <View style={styles.header}>
+          <Image
+            source={{ uri: 'https://i.pravatar.cc/150?img=1' }}
+            style={styles.profilePic}
+          />
+          <View style={styles.logo} />
+          <View style={styles.notification}>
+            <Ionicons name="time" size={16} color="#B8B8B8" />
+            <Text style={styles.badge}>10</Text>
+          </View>
         </View>
-      </View>
 
-      {/* Title Section with Back & Filter */}
-      <View style={styles.titleContainer}>
-        <TouchableOpacity style={styles.backButton} onPress={onBack}>
-          <Ionicons name="arrow-back" size={24} color="#FFF" />
-        </TouchableOpacity>
+        {/* Back Arrow and Filter (outside title card) */}
+        <View style={styles.actionButtons}>
+          <TouchableOpacity onPress={onBack} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={20} color="#FFF" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.filterButton}>
+            <Ionicons name="filter" size={20} color="#FFF" />
+          </TouchableOpacity>
+        </View>
 
+        {/* Title Card */}
         <View style={styles.titleCard}>
           <Text style={styles.title}>Achievements</Text>
           <Text style={styles.complete}>0 complete</Text>
         </View>
 
-        <TouchableOpacity style={styles.filterButton}>
-          <Ionicons name="filter" size={24} color="#FFF" />
-        </TouchableOpacity>
-      </View>
-
-      {/* Achievements List */}
-      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
+        {/* Achievement Cards */}
         {achievements.map((item, index) => (
           <View key={index} style={styles.card}>
             <View style={styles.row}>
@@ -78,17 +68,21 @@ export default function AchievementsScreen({ navigation, onBack }) {
               <Text style={styles.progress}>{item.progress}</Text>
             </View>
             <View style={styles.row}>
-              <View style={styles.rewardButton}>
+              <LinearGradient
+                colors={['#00C853', '#00E676']}
+                style={styles.rewardButton}
+              >
                 <Text style={styles.rewardText}>{item.reward}</Text>
-              </View>
+              </LinearGradient>
               {item.hasCopy && (
-                <TouchableOpacity style={styles.copyButton} onPress={copyReferral}>
+                <TouchableOpacity style={styles.copyButton}>
                   <Text style={styles.copyText}>Copy Referral Link</Text>
                 </TouchableOpacity>
               )}
             </View>
           </View>
         ))}
+
         <View style={{ height: 40 }} />
       </ScrollView>
     </View>
@@ -118,24 +112,26 @@ const styles = StyleSheet.create({
   logo: {
     width: 30,
     height: 30,
+    backgroundColor: '#FFF',
+    borderRadius: 8,
   },
-  stonesBadge: {
+  notification: {
+    position: 'relative',
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#2D2D3D',
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 20,
-    gap: 6,
+    borderRadius: 16,
   },
-  stonesText: {
+  badge: {
     color: '#FFF',
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '600',
+    marginLeft: 4,
   },
-  titleContainer: {
+  actionButtons: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     marginBottom: 20,
@@ -145,24 +141,24 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     backgroundColor: '#1A1A2E',
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   filterButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: '#1A1A2E',
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   titleCard: {
-    flex: 1,
     backgroundColor: '#1A1A2E',
-    marginHorizontal: 12,
+    marginHorizontal: 20,
     padding: 16,
     borderRadius: 16,
     alignItems: 'center',
+    marginBottom: 20,
   },
   title: {
     color: '#FFF',
@@ -174,15 +170,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 4,
   },
-  scroll: {
-    flex: 1,
-  },
   card: {
     backgroundColor: '#1E1E2E',
     marginHorizontal: 20,
-    marginBottom: 16,
     padding: 16,
     borderRadius: 16,
+    marginBottom: 16,
   },
   row: {
     flexDirection: 'row',
@@ -201,10 +194,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   rewardButton: {
-    backgroundColor: '#00C853',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
+    alignItems: 'center',
     shadowColor: '#00C853',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.6,

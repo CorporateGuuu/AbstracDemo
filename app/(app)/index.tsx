@@ -9,13 +9,12 @@ import {
   StyleSheet,
   Share,
 } from 'react-native';
-import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import ChallengeModal from '../../components/ChallengeModal';
 
-export default function Home() {
-  const router = useRouter();
+export default function Home({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const shareReferral = async () => {
     await Share.share({
@@ -28,22 +27,31 @@ export default function Home() {
       <ScrollView>
         {/* Header */}
         <View style={styles.header}>
-          <Image
-            source={{ uri: 'https://i.pravatar.cc/150?img=1' }}
-            style={styles.profilePic}
-          />
-          <View style={styles.logo} />
-          <View style={styles.notification}>
-            <Ionicons name="notifications-outline" size={24} color="#FFF" />
-            <Text style={styles.badge}>10</Text>
+          <TouchableOpacity onPress={() => navigation?.navigateToProfile?.()}>
+            <Image source={{ uri: 'https://i.pravatar.cc/150?img=1' }} style={styles.profilePic} />
+          </TouchableOpacity>
+
+          <View style={styles.logoContainer}>
+            <Image
+              source={require('../../assets/logo-white.png')}
+              style={styles.logoImage}
+              resizeMode="contain"
+            />
           </View>
+
+          <TouchableOpacity>
+            <View style={styles.stonesBadge}>
+              <Ionicons name="time" size={16} color="#B8B8B8" />
+              <Text style={styles.stonesCount}>125</Text>
+            </View>
+          </TouchableOpacity>
         </View>
 
         {/* Menu Buttons */}
         <View style={styles.menuRow}>
           <TouchableOpacity
             style={styles.menuButton}
-            onPress={() => router.push('/(app)/achievements')}
+            onPress={() => navigation?.navigateToAchievements?.()}
           >
             <Ionicons name="trophy-outline" size={20} color="#FFF" />
             <Text style={styles.menuLabel}>Achievements</Text>
@@ -64,7 +72,7 @@ export default function Home() {
           <Text style={styles.sectionTitle}>1v1 Your Best Friends</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.friendsScroll}>
             {[1, 2, 3, 4].map((i) => (
-              <TouchableOpacity key={i} style={styles.friendAvatar} onPress={() => router.push('/(app)/profile')}>
+              <TouchableOpacity key={i} style={styles.friendAvatar} onPress={() => navigation?.navigateToFriendProfile?.(i)}>
                 <Image
                   source={{ uri: `https://i.pravatar.cc/150?img=${i + 10}` }}
                   style={styles.avatar}
@@ -76,12 +84,15 @@ export default function Home() {
       </ScrollView>
 
       {/* Challenge Modal */}
-      <ChallengeModal visible={modalVisible} onClose={() => setModalVisible(false)} />
+      <ChallengeModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onNavigateToFrames={() => navigation?.navigateToFrames?.()}
+      />
     </View>
   );
 }
 
-// Keep your existing styles + add:
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0A0A0F', paddingTop: 50 },
   header: {
@@ -98,7 +109,20 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#FFF',
   },
-  logo: { width: 40, height: 40, resizeMode: 'contain' },
+  logoContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  logoImage: {
+    width: 120,
+    height: 40,
+  },
+  logoText: {
+    color: '#FFF',
+    fontSize: 28,
+    fontWeight: 'bold',
+    fontStyle: 'italic',
+  },
   menuRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -135,20 +159,19 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#FFF',
   },
-  notification: { position: 'relative' },
-  badge: {
-    position: 'absolute',
-    top: -5,
-    right: -10,
-    backgroundColor: '#FF4757',
-    color: '#FFF',
-    fontSize: 10,
+  stonesBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2D2D3D',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    gap: 4,
+  },
+  stonesCount: {
+    color: '#FFD700',
+    fontSize: 14,
     fontWeight: 'bold',
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    textAlign: 'center',
-    lineHeight: 18,
   },
   friendsScroll: { marginLeft: -20, paddingLeft: 20 },
 });

@@ -4,7 +4,7 @@ import {
   View,
   Text,
   Image,
-  FlatList,
+  ScrollView,
   RefreshControl,
   StyleSheet,
   Dimensions,
@@ -13,18 +13,27 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
-const ITEM_SIZE = (width - 48 - 16) / 3; // 3 cols, 8px gap, 20px side padding
+const ITEM_SIZE = (width - 80) / 3; // 3 cols, 20px total side padding (40px per side)
 
 const mockPosts = [
   { id: 1, imageUrl: 'https://images.unsplash.com/photo-1506905925346-5002b359c9bc?w=400' },
   { id: 2, imageUrl: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400' },
   { id: 3, imageUrl: 'https://images.unsplash.com/photo-1511884642898-4c922225c15c?w=400' },
   { id: 4, imageUrl: 'https://images.unsplash.com/photo-1494500764479-0c8f4544f368?w=400' },
-  { id: 5, imageUrl: 'https://images.unsplash.com/photo-1506197061612-5a1d3e6d8d8b?w=400' },
+  { id: 5, imageUrl: 'https://images.unsplash.com/photo-1506197061612-5a1d3e6d8b8b?w=400' },
   { id: 6, imageUrl: 'https://images.unsplash.com/photo-1518568814500-bf0f8d125322?w=400' },
+  { id: 7, imageUrl: 'https://images.unsplash.com/photo-1541963463532-d68292c34f19?w=400' },
+  { id: 8, imageUrl: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400' },
+  { id: 9, imageUrl: 'https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=400' },
+  { id: 10, imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400' },
+  { id: 11, imageUrl: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=400' },
+  { id: 12, imageUrl: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=400' },
+  { id: 13, imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400' },
+  { id: 14, imageUrl: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400' },
+  { id: 15, imageUrl: 'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=400' },
 ];
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ navigation }) {
   const [winRate, setWinRate] = useState(57.4);
   const [friends, setFriends] = useState(81);
   const [refreshing, setRefreshing] = useState(false);
@@ -58,10 +67,10 @@ export default function ProfileScreen() {
             source={{ uri: 'https://i.pravatar.cc/150?img=3' }}
             style={styles.avatar}
           />
-          <View style={styles.stat}>
+          <TouchableOpacity style={styles.stat} onPress={() => navigation?.navigateToSearch?.()}>
             <Text style={styles.statValue}>{friends}</Text>
             <Text style={styles.statLabel}>friends</Text>
-          </View>
+          </TouchableOpacity>
         </View>
         <View style={styles.badge}>
           <Text style={styles.badgeText}>Light the beam</Text>
@@ -69,19 +78,15 @@ export default function ProfileScreen() {
       </View>
 
       {/* Posts Grid */}
-      <FlatList
-        data={mockPosts}
-        numColumns={3}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <Image source={{ uri: item.imageUrl }} style={styles.postImage} />
-        )}
-        contentContainerStyle={styles.grid}
-        columnWrapperStyle={styles.row}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#FFF" />
-        }
-      />
+      <View style={styles.grid}>
+        {mockPosts.map((post) => (
+          <Image
+            key={post.id}
+            source={{ uri: post.imageUrl }}
+            style={styles.postImage}
+          />
+        ))}
+      </View>
     </View>
   );
 }
@@ -127,11 +132,17 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   badgeText: { color: '#FFF', fontWeight: '600' },
-  grid: { paddingHorizontal: 20 },
-  row: { justifyContent: 'space-between', marginBottom: 8 },
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingTop: 16,
+  },
   postImage: {
     width: ITEM_SIZE,
     height: ITEM_SIZE,
     borderRadius: 16,
+    marginBottom: 8,
   },
 });
