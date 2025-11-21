@@ -1,5 +1,6 @@
 {
   "expo": {
+    "name": "AbstracDemo",
     "slug": "abstracdemo",
     "assetBundlePatterns": [
       "**/*"
@@ -12,13 +13,28 @@
     "owner": "corporateguuu",
     "plugins": [
       "expo-secure-store",
-      "expo-router"
+      "expo-router",
+      [
+        "expo-notifications",
+        {
+          "color": "#6C5CE7",
+          "sounds": [
+            "./assets/sounds/pop.mp3",
+            "./assets/sounds/chime.mp3",
+            "./assets/sounds/jackpot.mp3",
+            "./assets/sounds/coin.mp3"
+          ]
+        }
+      ]
     ],
     "ios": {
       "bundleIdentifier": "com.corporateguuu.abstracdemo"
     },
     "experiments": {
       "typedRoutes": true
+    },
+    "android": {
+      "package": "com.corporateguuu.abstracdemo"
     }
   }
 }

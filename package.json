@@ -18,15 +18,22 @@
     "expo-dev-client": "~6.0.17",
     "expo-linear-gradient": "~15.0.7",
     "expo-linking": "^8.0.8",
+    "expo-notifications": "^0.32.13",
     "expo-router": "~6.0.14",
     "expo-secure-store": "~15.0.7",
     "expo-status-bar": "~3.0.8",
+    "firebase": "^12.6.0",
     "lodash": "^4.17.21",
     "react": "19.1.0",
+    "react-firebase-hooks": "^5.1.1",
     "react-native": "0.81.5",
+    "react-native-confetti-cannon": "^1.5.2",
+    "react-native-gesture-handler": "~2.28.0",
     "react-native-reanimated": "~4.1.1",
-    "react-native-svg": "^15.12.1",
-    "typescript": "~5.9.2"
+    "react-native-svg": "^15.12.1"
   },
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
 }
