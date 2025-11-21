@@ -9,8 +9,10 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 import { auth } from '../../firebase';
 
 const { width } = Dimensions.get('window');
@@ -52,7 +54,6 @@ export default function ProfileScreen({ navigation }) {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Ionicons name="search" size={24} color="#FFF" />
         <Text style={styles.username}>willsamrick</Text>
         <Ionicons name="ellipsis-horizontal" size={24} color="#FFF" />
       </View>
@@ -93,6 +94,25 @@ export default function ProfileScreen({ navigation }) {
           />
         ))}
       </View>
+
+      <Pressable
+        onPress={() => {
+          navigation?.navigateToSearch?.();
+          Haptics.selectionAsync();
+        }}
+        style={{
+          position: 'absolute',
+          right: 16,
+          top: 56,
+          zIndex: 10,
+          padding: 8,
+          backgroundColor: 'rgba(255,255,255,0.05)',
+          borderRadius: 20,
+        }}
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+      >
+        <Ionicons name="search" size={24} color="#FFF" />
+      </Pressable>
     </View>
   );
 }

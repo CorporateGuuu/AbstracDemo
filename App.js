@@ -87,7 +87,7 @@ export default function App() {
       case 'home':
         return <Home navigation={navigationProps} />;
       case 'profile':
-        return <Profile />;
+        return <Profile navigation={navigationProps} />;
       case 'friendProfile':
         return (
           <FriendProfile
