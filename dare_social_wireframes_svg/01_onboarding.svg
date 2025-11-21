@@ -1,0 +1,12 @@
+<svg width="390" height="844" viewBox="0 0 390 844" xmlns="http://www.w3.org/2000/svg">
+  <rect width="390" height="844" fill="#fff" stroke="#000" stroke-width="1"/>
+  <text x="195" y="40" text-anchor="middle" font-family="Arial" font-size="20" fill="#000">Onboarding / Login</text>
+<rect x="45" y="80" width="300" height="200" fill="#eee" stroke="#aaa"/>
+<text x="195" y="310" text-anchor="middle" font-size="14" font-family="Arial">Illustration Placeholder</text>
+<rect x="95" y="400" width="200" height="40" fill="#ddd" stroke="#000"/>
+<text x="195" y="425" text-anchor="middle" font-size="14">Sign up with Email</text>
+<rect x="95" y="460" width="200" height="40" fill="#ddd" stroke="#000"/>
+<text x="195" y="485" text-anchor="middle" font-size="14">Sign up with Google</text>
+<rect x="95" y="520" width="200" height="40" fill="#ddd" stroke="#000"/>
+<text x="195" y="545" text-anchor="middle" font-size="14">Sign up with Apple</text>
+</svg>

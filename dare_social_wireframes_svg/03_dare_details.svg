@@ -1,0 +1,12 @@
+<svg width="390" height="844" viewBox="0 0 390 844" xmlns="http://www.w3.org/2000/svg">
+  <rect width="390" height="844" fill="#fff" stroke="#000" stroke-width="1"/>
+  <text x="195" y="40" text-anchor="middle" font-family="Arial" font-size="20" fill="#000">Dare Details</text>
+<rect x="20" y="80" width="350" height="200" fill="#eee" stroke="#aaa"/>
+<text x="195" y="100" text-anchor="middle" font-size="14">Media Placeholder</text>
+<text x="30" y="310" font-size="14">Description goes here...</text>
+<text x="30" y="340" font-size="14">Reward: +20 Stone 🪨</text>
+<rect x="70" y="380" width="250" height="40" fill="#ddd" stroke="#000"/>
+<text x="195" y="405" text-anchor="middle" font-size="14">Accept Dare</text>
+<rect x="70" y="440" width="250" height="40" fill="#ddd" stroke="#000"/>
+<text x="195" y="465" text-anchor="middle" font-size="14">Decline</text>
+</svg>

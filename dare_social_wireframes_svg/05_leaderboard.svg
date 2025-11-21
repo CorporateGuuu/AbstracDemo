@@ -1,0 +1,11 @@
+<svg width="390" height="844" viewBox="0 0 390 844" xmlns="http://www.w3.org/2000/svg">
+  <rect width="390" height="844" fill="#fff" stroke="#000" stroke-width="1"/>
+  <text x="195" y="40" text-anchor="middle" font-family="Arial" font-size="20" fill="#000">Leaderboard</text>
+<text x="195" y="80" text-anchor="middle" font-size="16">Top 3</text>
+<rect x="50" y="100" width="80" height="80" fill="#eee" stroke="#aaa"/>
+<rect x="160" y="100" width="80" height="80" fill="#eee" stroke="#aaa"/>
+<rect x="270" y="100" width="80" height="80" fill="#eee" stroke="#aaa"/>
+<text x="195" y="210" text-anchor="middle" font-size="14">Ranks 4–10</text>
+<rect x="50" y="230" width="300" height="200" fill="#fff" stroke="#aaa"/>
+<text x="195" y="460" text-anchor="middle" font-size="14" fill="red">Last Place Highlight</text>
+</svg>
