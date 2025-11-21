@@ -1,7 +1,11 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { FeedProvider } from '../../contexts/FeedContext';
 
 export default function AppLayout() {
+  // TODO: Implement unreadFriendPosts calculation
+  const unreadFriendPosts = 0; // Placeholder - would come from useFriendsFeed hook
+
   return (
     <Tabs
       screenOptions={{
@@ -11,24 +15,53 @@ export default function AppLayout() {
         headerShown: false,
       }}
     >
+      {/* FRIENDS TAB */}
       <Tabs.Screen
-        name="index"
+        name="friends"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <Ionicons name="home-outline" size={24} color={color} />,
+          title: 'Friends',
+          tabBarIcon: () => <Ionicons name="people" size={26} />,
+          tabBarBadge: unreadFriendPosts > 0 ? unreadFriendPosts : undefined,
         }}
       />
+
+      {/* FOLLOWING TAB */}
+      <Tabs.Screen
+        name="following"
+        options={{
+          title: 'Following',
+          tabBarIcon: () => <Ionicons name="compass" size={26} />,
+        }}
+      />
+
+      {/* FOR YOU TAB */}
+      <Tabs.Screen
+        name="forYou"
+        options={{
+          title: 'For You',
+          tabBarIcon: () => <Ionicons name="sparkles" size={28} color="#FF3B30" />,
+        }}
+      />
+
+      {/* EXPLORE TAB */}
+      <Tabs.Screen
+        name="index" // Default home tab
+        options={{
+          title: 'Explore',
+          tabBarIcon: () => <Ionicons name="flame" size={28} color="#FF9500" />,
+        }}
+      />
+
+      {/* Existing screens */}
       <Tabs.Screen
         name="profile"
         options={{
-          title: 'Profile',
           tabBarIcon: ({ color }) => <Ionicons name="person-circle-outline" size={28} color={color} />,
         }}
       />
       <Tabs.Screen
         name="frames"
         options={{
-          title: 'Frames',
           tabBarIcon: ({ color }) => <Ionicons name="aperture-outline" size={24} color={color} />,
         }}
       />

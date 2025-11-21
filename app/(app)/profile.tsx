@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { auth } from '../../firebase';
 
 const { width } = Dimensions.get('window');
 const ITEM_SIZE = (width - 80) / 3; // 3 cols, 20px total side padding (40px per side)
@@ -75,6 +76,11 @@ export default function ProfileScreen({ navigation }) {
         <View style={styles.badge}>
           <Text style={styles.badgeText}>Light the beam</Text>
         </View>
+        {/* Visibility Badge */}
+        <View style={styles.visibilityBadge}>
+          <Ionicons name="globe" size={16} color="#888" />
+          <Text style={styles.visibilityText}>Public profile</Text>
+        </View>
       </View>
 
       {/* Posts Grid */}
@@ -132,6 +138,13 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   badgeText: { color: '#FFF', fontWeight: '600' },
+  visibilityBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginTop: 8,
+  },
+  visibilityText: { color: '#888', marginLeft: 6, fontSize: 14 },
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',

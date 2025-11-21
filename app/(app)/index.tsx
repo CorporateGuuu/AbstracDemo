@@ -1,5 +1,6 @@
 // app/(app)/index.tsx
 import React, { useState } from 'react';
+import { FeedProvider } from '../../contexts/FeedContext';
 import {
   View,
   Text,
@@ -23,29 +24,31 @@ export default function Home({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation?.navigateToProfile?.()}>
-            <Image source={{ uri: 'https://i.pravatar.cc/150?img=1' }} style={styles.profilePic} />
-          </TouchableOpacity>
+    <FeedProvider>
+      <View style={styles.container}>
+        <ScrollView>
+          {/* Header */}
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => navigation?.navigateToProfile?.()}>
+              <Image source={{ uri: 'https://i.pravatar.cc/150?img=1' }} style={styles.profilePic} />
+            </TouchableOpacity>
 
-          <View style={styles.logoContainer}>
-            <Image
-              source={require('../../assets/logo-white.png')}
-              style={styles.logoImage}
-              resizeMode="contain"
-            />
-          </View>
-
-          <TouchableOpacity>
-            <View style={styles.stonesBadge}>
-              <Ionicons name="time" size={16} color="#B8B8B8" />
-              <Text style={styles.stonesCount}>125</Text>
+            <View style={styles.logoContainer}>
+              <Image
+                source={require('../../assets/logo-white.png')}
+                style={styles.logoImage}
+                resizeMode="contain"
+              />
             </View>
-          </TouchableOpacity>
-        </View>
+
+            {/* FORCE HIDE stones on home screen only - entire block removed */}
+            {/* <TouchableOpacity>
+              <View style={styles.stonesBadge}>
+                <Ionicons name="time" size={16} color="#B8B8B8" />
+                <Text style={styles.stonesCount}>125</Text>
+              </View>
+            </TouchableOpacity> */}
+          </View>
 
         {/* Menu Buttons */}
         <View style={styles.menuRow}>
@@ -89,7 +92,8 @@ export default function Home({ navigation }) {
         onClose={() => setModalVisible(false)}
         onNavigateToFrames={() => navigation?.navigateToFrames?.()}
       />
-    </View>
+      </View>
+    </FeedProvider>
   );
 }
 
