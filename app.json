@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "slug": "abstracdemo",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "d1bfd49a-ee29-4bab-b1de-6f85fca3069c"
+      }
+    },
+    "owner": "corporateguuu",
+    "plugins": [
+      "expo-secure-store",
+      "expo-router"
+    ],
+    "ios": {
+      "bundleIdentifier": "com.corporateguuu.abstracdemo"
+    },
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
